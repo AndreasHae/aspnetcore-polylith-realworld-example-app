@@ -21,4 +21,9 @@ public class ArticlesComponent : IArticlesComponent
         var slug = _slugHelper.GenerateSlug(title);
         return new Article(slug, title, description, body, tagList, _timekeeper.Now, _timekeeper.Now);
     }
+
+    public Article Get(string slug)
+    {
+        throw new NotImplementedException();
+    }
 }

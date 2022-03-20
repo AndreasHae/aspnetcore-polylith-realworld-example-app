@@ -21,7 +21,7 @@ public class ArticleTests
     }
 
     [Fact]
-    public void CreateArticle_SetsDatesCorrectly()
+    public void Create_SetsDatesCorrectly()
     {
         // Arrange
         var title = "My test article";
@@ -44,12 +44,25 @@ public class ArticleTests
     }
 
     [Fact]
-    public void CreateArticle_SetsSlug()
+    public void Create_SetsSlug()
     {
         // Act
         var article = _articles.Create(new("My amazing article", "", "", Array.Empty<string>()));
 
         // Assert
         article.Slug.Should().Be("my-amazing-article");
+    }
+
+    [Fact]
+    public void Get_GetsCreatedArticleBySlug()
+    {
+        // Arrange
+        var createdArticle = _articles.Create(new CreateArticleCommand("My article!", "", "", Array.Empty<string>()));
+
+        // Act
+        var article = _articles.Get(createdArticle.Slug);
+
+        // Assert
+        article.Should().BeEquivalentTo(createdArticle);
     }
 }

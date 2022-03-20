@@ -48,7 +48,8 @@ app.MapGet("/articles/feed", NotImplemented);
 app.MapGet("/articles", NotImplemented);
 app.MapPost("/articles", ([FromBody] ArticleWrapper<CreateArticleCommand> requestBody, IArticlesComponent articles)
     => new ArticleWrapper<Article>(articles.Create(requestBody.Article)));
-app.MapGet("/articles/{slug}", NotImplemented);
+app.MapGet("/articles/{slug}", (string slug, IArticlesComponent articles)
+    => new ArticleWrapper<Article>(articles.Get(slug)));
 app.MapPut("/articles/{slug}", NotImplemented);
 app.MapDelete("/articles/{slug}", NotImplemented);
 
