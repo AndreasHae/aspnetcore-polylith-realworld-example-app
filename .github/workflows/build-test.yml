@@ -22,7 +22,7 @@ jobs:
       - name: Build
         run: dotnet build
       - name: Start server in background
-        run: ./Conduit/bin/Debug/net6.0/Conduit &
+        run: ./bases/Conduit.RestApi/bin/Debug/net6.0/Conduit.RestApi &
         env:
           ASPNETCORE_URLS: http://localhost:5000
       - name: Test spec compliance
