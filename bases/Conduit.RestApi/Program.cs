@@ -46,8 +46,8 @@ app.MapDelete("/profiles/{username}/follow", NotImplemented);
 
 app.MapGet("/articles/feed", NotImplemented);
 app.MapGet("/articles", NotImplemented);
-app.MapPost("/articles", ([FromBody] CreateArticleCommand command, IArticlesComponent articles)
-    => new { Article = articles.Create(command) });
+app.MapPost("/articles", ([FromBody] ArticleWrapper<CreateArticleCommand> requestBody, IArticlesComponent articles)
+    => new ArticleWrapper<Article>(articles.Create(requestBody.Article)));
 app.MapGet("/articles/{slug}", NotImplemented);
 app.MapPut("/articles/{slug}", NotImplemented);
 app.MapDelete("/articles/{slug}", NotImplemented);
@@ -60,3 +60,5 @@ app.MapPost("/articles/{slug}/favorite", NotImplemented);
 app.MapDelete("/articles/{slug}/favorite", NotImplemented);
 
 app.Run();
+
+record ArticleWrapper<T>(T Article);
