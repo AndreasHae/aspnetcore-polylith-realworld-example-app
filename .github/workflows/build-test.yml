@@ -7,27 +7,46 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build-test:
 
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 6.0.x
+
       - name: Restore dependencies
         run: dotnet restore
+
       - name: Build
         run: dotnet build
+
+      - name: Run unit tests
+        run: dotnet test
+  
+  test-compliance:
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+
       - name: Start server in background
-        run: ./bases/Conduit.RestApi/bin/Debug/net6.0/Conduit.RestApi &
-        env:
-          ASPNETCORE_URLS: http://localhost:5000
+        run: dotnet run --project bases/Conduit.RestApi &
+
       - name: Test spec compliance
         run: ./test/run-api-tests.sh
         env:
           APIURL: http://localhost:5000/api
+
       - name: Stop server
         run: kill %1
