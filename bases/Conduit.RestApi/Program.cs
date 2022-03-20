@@ -1,10 +1,11 @@
-using System.Net;
 using Conduit.Articles.Core;
+using Conduit.Articles.Core.Store;
 using Conduit.Articles.Interface;
 using Conduit.Common;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Slugify;
+using static Microsoft.AspNetCore.Http.Results;
 
 void NotImplemented()
 {
@@ -17,7 +18,7 @@ Task NotImplementedHandler(HttpContext handler)
 
     if (exception is NotImplementedException)
     {
-        handler.Response.StatusCode = (int)HttpStatusCode.NotImplemented;
+        handler.Response.StatusCode = StatusCodes.Status501NotImplemented;
     }
 
     return Task.CompletedTask;
@@ -28,6 +29,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<ITimekeeper, Timekeeper>();
 builder.Services.AddScoped<IArticlesComponent, ArticlesComponent>();
 builder.Services.AddScoped<ISlugHelper, SlugHelper>();
+builder.Services.AddScoped<IArticlesRepository, DbArticlesRepository>();
+builder.Services.AddDbContext<ArticleContext>();
 
 var app = builder.Build();
 
@@ -48,8 +51,12 @@ app.MapGet("/articles/feed", NotImplemented);
 app.MapGet("/articles", NotImplemented);
 app.MapPost("/articles", ([FromBody] ArticleWrapper<CreateArticleCommand> requestBody, IArticlesComponent articles)
     => new ArticleWrapper<Article>(articles.Create(requestBody.Article)));
-app.MapGet("/articles/{slug}", (string slug, IArticlesComponent articles)
-    => new ArticleWrapper<Article>(articles.Get(slug)));
+app.MapGet("/articles/{slug}", (string slug, IArticlesComponent articles) =>
+{
+    var article = articles.Get(slug);
+    if (article is null) return NotFound();
+    return Ok(new ArticleWrapper<Article>(article));
+});
 app.MapPut("/articles/{slug}", NotImplemented);
 app.MapDelete("/articles/{slug}", NotImplemented);
 
