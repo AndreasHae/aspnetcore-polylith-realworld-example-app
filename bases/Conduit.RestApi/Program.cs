@@ -4,6 +4,7 @@ using Conduit.Articles.Interface;
 using Conduit.Common;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Slugify;
 
 void NotImplemented()
 {
@@ -26,6 +27,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<ITimekeeper, Timekeeper>();
 builder.Services.AddScoped<IArticlesComponent, ArticlesComponent>();
+builder.Services.AddScoped<ISlugHelper, SlugHelper>();
 
 var app = builder.Build();
 
