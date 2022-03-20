@@ -10,4 +10,8 @@
       <ProjectReference Include="..\Conduit.Common\Conduit.Common.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Slugify.Core" Version="3.0.0" />
+    </ItemGroup>
+
 </Project>

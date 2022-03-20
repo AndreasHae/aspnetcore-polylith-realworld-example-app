@@ -4,6 +4,7 @@ using Conduit.Articles.Interface;
 using Conduit.Common;
 using FluentAssertions;
 using Moq;
+using Slugify;
 using Xunit;
 
 namespace Conduit.Articles.UnitTests;
@@ -16,7 +17,7 @@ public class ArticleTests
 
     public ArticleTests()
     {
-        _articles = new ArticlesComponent(_timekeeper.Object);
+        _articles = new ArticlesComponent(_timekeeper.Object, new SlugHelper());
     }
 
     [Fact]
@@ -40,5 +41,15 @@ public class ArticleTests
         article.TagList.Should().BeEquivalentTo(tagList);
         article.CreatedAt.Should().Be(now);
         article.UpdatedAt.Should().Be(now);
+    }
+
+    [Fact]
+    public void CreateArticle_SetsSlug()
+    {
+        // Act
+        var article = _articles.Create(new("My amazing article", "", "", Array.Empty<string>()));
+
+        // Assert
+        article.Slug.Should().Be("my-amazing-article");
     }
 }
