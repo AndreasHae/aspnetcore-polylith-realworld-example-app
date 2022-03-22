@@ -48,7 +48,8 @@ app.UsePathBase("/api");
 app.UseExceptionHandler((appBuilder) => { appBuilder.Run(NotImplementedHandler); });
 app.UseRouting();
 
-app.MapPost("/users/login", NotImplemented);
+app.MapPost("/users/login", ([FromBody] LoginUserRequest request, IUsersComponent users) 
+    => new UserResponse(users.Login(request.User)));
 app.MapPost("/users", ([FromBody] RegisterUserRequest request, IUsersComponent users)
     => new UserResponse(users.Register(request.User)));
 app.MapGet("/user", NotImplemented);
