@@ -8,6 +8,7 @@ using Conduit.Users.Core.Store;
 using Conduit.Users.Interface;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Slugify;
 using static Microsoft.AspNetCore.Http.Results;
 
@@ -35,11 +36,11 @@ builder.Services.AddScoped<ITimekeeper, Timekeeper>();
 builder.Services.AddScoped<IArticlesComponent, ArticlesComponent>();
 builder.Services.AddScoped<ISlugHelper, SlugHelper>();
 builder.Services.AddScoped<IArticlesRepository, DbArticlesRepository>();
-builder.Services.AddDbContext<ArticleContext>();
+builder.Services.AddDbContext<ArticleContext>(options => options.UseInMemoryDatabase("articles"));
 
 builder.Services.AddScoped<IUsersComponent, UsersComponent>();
 builder.Services.AddScoped<IUserRepository, DbUserRepository>();
-builder.Services.AddDbContext<UserContext>();
+builder.Services.AddDbContext<UserContext>(options => options.UseInMemoryDatabase("users"));
 
 var app = builder.Build();
 

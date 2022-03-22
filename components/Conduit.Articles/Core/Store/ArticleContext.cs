@@ -11,11 +11,6 @@ public class ArticleContext : DbContext
     {
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseInMemoryDatabase("articles");
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         var article = modelBuilder.Entity<Article>();
