@@ -8,7 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "components", "components", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conduit.Articles", "components\Conduit.Articles\Conduit.Articles.csproj", "{124B1EC4-9651-4DA0-831B-AFDB2EC7A0E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conduit.Articles.UnitTests", "components\Conduit.Articles.UnitTests\Conduit.Articles.UnitTests.csproj", "{EFE662E3-79AD-4321-B5A2-1BEED20F37D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conduit.Articles.Tests", "components\Conduit.Articles.Tests\Conduit.Articles.Tests.csproj", "{EFE662E3-79AD-4321-B5A2-1BEED20F37D2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conduit.Common", "components\Conduit.Common\Conduit.Common.csproj", "{78926FB6-3B16-4665-973C-AF1DF115E6A5}"
 EndProject

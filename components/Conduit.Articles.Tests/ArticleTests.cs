@@ -7,7 +7,7 @@ using Moq;
 using Slugify;
 using Xunit;
 
-namespace Conduit.Articles.UnitTests;
+namespace Conduit.Articles.Tests;
 
 public class ArticleTests
 {
