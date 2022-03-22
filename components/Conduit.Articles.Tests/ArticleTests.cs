@@ -1,8 +1,10 @@
 using System;
 using Conduit.Articles.Core;
+using Conduit.Articles.Core.Store;
 using Conduit.Articles.Interface;
 using Conduit.Common;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using Slugify;
 using Xunit;
@@ -17,7 +19,11 @@ public class ArticleTests
 
     public ArticleTests()
     {
-        _articles = new ArticlesComponent(_timekeeper.Object, new SlugHelper(), new Mock<IArticlesRepository>().Object);
+        var articlesRepository = new DbArticlesRepository(new ArticleContext(
+            new DbContextOptionsBuilder<ArticleContext>()
+                .UseInMemoryDatabase("articles_tests")
+                .Options));
+        _articles = new ArticlesComponent(_timekeeper.Object, new SlugHelper(), articlesRepository);
     }
 
     [Fact]
@@ -56,8 +62,6 @@ public class ArticleTests
     [Fact]
     public void Get_GetsCreatedArticleBySlug()
     {
-        // TODO Make this an integration test
-        
         // Arrange
         var createdArticle = _articles.Create(new CreateArticleCommand("My article!", "", "", Array.Empty<string>()));
 
