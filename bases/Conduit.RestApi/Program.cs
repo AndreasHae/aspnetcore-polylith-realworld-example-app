@@ -3,6 +3,8 @@ using Conduit.Articles.Core.Store;
 using Conduit.Articles.Interface;
 using Conduit.Common;
 using Conduit.RestApi;
+using Conduit.Users.Core;
+using Conduit.Users.Core.Store;
 using Conduit.Users.Interface;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -29,10 +31,15 @@ Task NotImplementedHandler(HttpContext handler)
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<ITimekeeper, Timekeeper>();
+
 builder.Services.AddScoped<IArticlesComponent, ArticlesComponent>();
 builder.Services.AddScoped<ISlugHelper, SlugHelper>();
 builder.Services.AddScoped<IArticlesRepository, DbArticlesRepository>();
 builder.Services.AddDbContext<ArticleContext>();
+
+builder.Services.AddScoped<IUsersComponent, UsersComponent>();
+builder.Services.AddScoped<IUserRepository, DbUserRepository>();
+builder.Services.AddDbContext<UserContext>();
 
 var app = builder.Build();
 
@@ -41,7 +48,7 @@ app.UseExceptionHandler((appBuilder) => { appBuilder.Run(NotImplementedHandler);
 app.UseRouting();
 
 app.MapPost("/users/login", NotImplemented);
-app.MapPost("/users", (RegisterUserRequest request, IUsersComponent users)
+app.MapPost("/users", ([FromBody] RegisterUserRequest request, IUsersComponent users)
     => new UserResponse(users.Register(request.User)));
 app.MapGet("/user", NotImplemented);
 app.MapPut("/user", NotImplemented);
