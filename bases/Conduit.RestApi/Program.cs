@@ -2,6 +2,8 @@ using Conduit.Articles.Core;
 using Conduit.Articles.Core.Store;
 using Conduit.Articles.Interface;
 using Conduit.Common;
+using Conduit.RestApi;
+using Conduit.Users.Interface;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Slugify;
@@ -39,7 +41,8 @@ app.UseExceptionHandler((appBuilder) => { appBuilder.Run(NotImplementedHandler);
 app.UseRouting();
 
 app.MapPost("/users/login", NotImplemented);
-app.MapPost("/users", NotImplemented);
+app.MapPost("/users", (RegisterUserRequest request, IUsersComponent users)
+    => new UserResponse(users.Register(request.User)));
 app.MapGet("/user", NotImplemented);
 app.MapPut("/user", NotImplemented);
 
@@ -49,13 +52,13 @@ app.MapDelete("/profiles/{username}/follow", NotImplemented);
 
 app.MapGet("/articles/feed", NotImplemented);
 app.MapGet("/articles", NotImplemented);
-app.MapPost("/articles", ([FromBody] ArticleWrapper<CreateArticleCommand> requestBody, IArticlesComponent articles)
-    => new ArticleWrapper<Article>(articles.Create(requestBody.Article)));
+app.MapPost("/articles", ([FromBody] CreateArticleRequest request, IArticlesComponent articles)
+    => new ArticleResponse(articles.Create(request.Article)));
 app.MapGet("/articles/{slug}", (string slug, IArticlesComponent articles) =>
 {
     var article = articles.Get(slug);
     if (article is null) return NotFound();
-    return Ok(new ArticleWrapper<Article>(article));
+    return Ok(new ArticleResponse(article));
 });
 app.MapPut("/articles/{slug}", NotImplemented);
 app.MapDelete("/articles/{slug}", NotImplemented);
@@ -68,5 +71,3 @@ app.MapPost("/articles/{slug}/favorite", NotImplemented);
 app.MapDelete("/articles/{slug}/favorite", NotImplemented);
 
 app.Run();
-
-record ArticleWrapper<T>(T Article);

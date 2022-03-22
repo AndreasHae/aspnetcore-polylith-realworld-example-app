@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\components\Conduit.Articles\Conduit.Articles.csproj" />
+      <ProjectReference Include="..\..\components\Conduit.Users\Conduit.Users.csproj" />
     </ItemGroup>
 
 </Project>
