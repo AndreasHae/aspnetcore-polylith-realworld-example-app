@@ -13,9 +13,12 @@ public class UserTests
 
     public UserTests()
     {
-        _users = new UsersComponent(new DbUserRepository(new UserContext(new DbContextOptionsBuilder<UserContext>()
-            .UseInMemoryDatabase("users_tests")
-            .Options)));
+        var userContext = new UserContext(
+            new DbContextOptionsBuilder<UserContext>()
+                .UseInMemoryDatabase("users_tests")
+                .Options);
+        userContext.Users.RemoveRange(userContext.Users);
+        _users = new UsersComponent(new DbUserRepository(userContext));
     }
 
     [Fact]
