@@ -1,46 +1,17 @@
-using Conduit.Articles.Core;
-using Conduit.Articles.Core.Store;
 using Conduit.Articles.Interface;
 using Conduit.Common;
 using Conduit.RestApi;
-using Conduit.Users.Core;
-using Conduit.Users.Core.Store;
 using Conduit.Users.Interface;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Slugify;
 using static Microsoft.AspNetCore.Http.Results;
-
-void NotImplemented()
-{
-    throw new NotImplementedException();
-}
-
-Task NotImplementedHandler(HttpContext handler)
-{
-    var exception = handler.Features.Get<IExceptionHandlerPathFeature>()!.Error;
-
-    if (exception is NotImplementedException)
-    {
-        handler.Response.StatusCode = StatusCodes.Status501NotImplemented;
-    }
-
-    return Task.CompletedTask;
-}
+using static Conduit.RestApi.NotImplementedHelpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<ITimekeeper, Timekeeper>();
-
-builder.Services.AddScoped<IArticlesComponent, ArticlesComponent>();
-builder.Services.AddScoped<ISlugHelper, SlugHelper>();
-builder.Services.AddScoped<IArticlesRepository, DbArticlesRepository>();
-builder.Services.AddDbContext<ArticleContext>(options => options.UseInMemoryDatabase("articles"));
-
-builder.Services.AddScoped<IUsersComponent, UsersComponent>();
-builder.Services.AddScoped<IUserRepository, DbUserRepository>();
-builder.Services.AddDbContext<UserContext>(options => options.UseInMemoryDatabase("users"));
+builder.Services.AddCommon();
+builder.Services.AddArticlesComponent(options => options.UseInMemoryDatabase("articles"));
+builder.Services.AddUsersComponent(options => options.UseInMemoryDatabase("users"));
 
 var app = builder.Build();
 
