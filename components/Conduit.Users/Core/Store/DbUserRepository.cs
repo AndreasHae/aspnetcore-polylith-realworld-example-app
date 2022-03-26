@@ -17,20 +17,8 @@ public class DbUserRepository : IUserRepository
         _context.SaveChanges();
     }
 
-    public User? Get(string email, string password)
+    public DbUser? Get(string email)
     {
-        return _context.Users
-            .FirstOrDefault(user => user.Email == email && user.Password == password)
-            ?.AsLoggedInUser();
+        return _context.Users.FirstOrDefault(user => user.Email == email);
     }
 }
-
-public record DbUser(
-    string Email,
-    string Password,
-    string Username,
-    string Bio,
-    string? Image)
-{
-    public User AsLoggedInUser() => new(Email, "some jwt token", Username, Bio, Image);
-};

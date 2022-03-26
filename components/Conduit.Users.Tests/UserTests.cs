@@ -53,4 +53,18 @@ public class UserTests
         user.Email.Should().Be(email);
         user.Token.Should().NotBeNullOrEmpty();
     }
+
+    [Fact]
+    public void Login_WithWrongPassword_ThrowsWrongPasswordException()
+    {
+        // Arrange
+        var email = "testy@example.com";
+        _users.Register(new RegisterUserCommand("testy", email, "testysPassword"));
+
+        // Act
+        var login = () => { _users.Login(new LoginUserCommand(email, "notTestysPassword")); };
+
+        // Assert
+        login.Should().Throw<WrongPasswordException>();
+    }
 }

@@ -20,9 +20,13 @@ public class UsersComponent : IUsersComponent
         return newUser.AsLoggedInUser();
     }
 
-    public User? Login(LoginUserCommand command)
+    public User Login(LoginUserCommand command)
     {
         var (email, password) = command;
-        return _userRepository.Get(email, password);
+        
+        var user = _userRepository.Get(email);
+        if (user.Password != password) throw new WrongPasswordException();
+
+        return user.AsLoggedInUser();
     }
 }
