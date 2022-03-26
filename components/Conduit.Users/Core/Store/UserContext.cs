@@ -1,4 +1,3 @@
-using Conduit.Users.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace Conduit.Users.Core.Store;
@@ -6,6 +5,7 @@ namespace Conduit.Users.Core.Store;
 public class UserContext : DbContext
 {
     public DbSet<DbUser> Users { get; set; }
+    public DbSet<DbSession> Sessions { get; set; }
 
     public UserContext(DbContextOptions options) : base(options)
     {
@@ -15,5 +15,8 @@ public class UserContext : DbContext
     {
         var user = modelBuilder.Entity<DbUser>();
         user.HasKey(u => u.Email);
+
+        var session = modelBuilder.Entity<DbSession>();
+        session.HasKey(s => s.Token);
     }
 }

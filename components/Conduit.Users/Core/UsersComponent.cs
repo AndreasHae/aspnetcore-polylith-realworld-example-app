@@ -17,7 +17,9 @@ public class UsersComponent : IUsersComponent
         var (username, email, password) = command;
         var newUser = new DbUser(email, password, username, "", null);
         _userRepository.Save(newUser);
-        return newUser.AsLoggedInUser();
+        var token = Guid.NewGuid().ToString();
+        _userRepository.AddSession(new DbSession(token, newUser.Email));
+        return newUser.AsLoggedInUser(token);
     }
 
     public User Login(LoginUserCommand command)
@@ -27,6 +29,14 @@ public class UsersComponent : IUsersComponent
         var user = _userRepository.Get(email);
         if (user.Password != password) throw new WrongPasswordException();
 
-        return user.AsLoggedInUser();
+        var token = Guid.NewGuid().ToString();
+        _userRepository.AddSession(new DbSession(token, email));
+
+        return user.AsLoggedInUser(token);
+    }
+
+    public User GetCurrent(string token)
+    {
+        return _userRepository.GetByToken(token).AsLoggedInUser(token);
     }
 }

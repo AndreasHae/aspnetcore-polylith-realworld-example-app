@@ -9,5 +9,5 @@ public record DbUser(
     string Bio,
     string? Image)
 {
-    public User AsLoggedInUser() => new(Email, "some jwt token", Username, Bio, Image);
+    public User AsLoggedInUser(string token) => new(Email, token, Username, Bio, Image);
 };

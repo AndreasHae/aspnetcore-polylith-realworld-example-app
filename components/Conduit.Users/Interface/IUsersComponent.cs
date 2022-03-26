@@ -4,6 +4,7 @@ public interface IUsersComponent
 {
     User Register(RegisterUserCommand command);
     User Login(LoginUserCommand command);
+    User GetCurrent(string token);
 }
 
 public record RegisterUserCommand(

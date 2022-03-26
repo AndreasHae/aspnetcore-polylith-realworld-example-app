@@ -67,4 +67,17 @@ public class UserTests
         // Assert
         login.Should().Throw<WrongPasswordException>();
     }
+
+    [Fact]
+    public void GetCurrent_WithValidToken_ReturnsCurrentUser()
+    {
+        // Arrange
+        var expectedUser = _users.Register(new RegisterUserCommand("testy", "testy@example.com", "testypass"));
+
+        // Act
+        var user = _users.GetCurrent(expectedUser.Token);
+
+        // Assert
+        user.Should().BeEquivalentTo(expectedUser);
+    }
 }
