@@ -1,3 +1,4 @@
+using System.Net;
 using Conduit.Articles.Interface;
 using Conduit.Common;
 using Conduit.RestApi;
@@ -5,7 +6,6 @@ using Conduit.Users.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static Microsoft.AspNetCore.Http.Results;
-using static Conduit.RestApi.NotImplementedHelpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,10 +16,14 @@ builder.Services.AddUsersComponent(options => options.UseInMemoryDatabase("users
 var app = builder.Build();
 
 app.UsePathBase("/api");
-app.UseExceptionHandler((appBuilder) => { appBuilder.Run(NotImplementedHandler); });
+app.UseExceptionMappings(new Dictionary<Type, HttpStatusCode>
+{
+    { typeof(NotImplementedException), HttpStatusCode.NotImplemented },
+    { typeof(WrongPasswordException), HttpStatusCode.Unauthorized }
+});
 app.UseRouting();
 
-app.MapPost("/users/login", ([FromBody] LoginUserRequest request, IUsersComponent users) 
+app.MapPost("/users/login", ([FromBody] LoginUserRequest request, IUsersComponent users)
     => new UserResponse(users.Login(request.User)));
 app.MapPost("/users", ([FromBody] RegisterUserRequest request, IUsersComponent users)
     => new UserResponse(users.Register(request.User)));
@@ -51,3 +55,5 @@ app.MapPost("/articles/{slug}/favorite", NotImplemented);
 app.MapDelete("/articles/{slug}/favorite", NotImplemented);
 
 app.Run();
+
+void NotImplemented() => throw new NotImplementedException();
