@@ -5,5 +5,5 @@ namespace Conduit.Users.Core;
 public interface IUserRepository
 {
     void Save(DbUser newUser);
-    DbUser? Get(string email);
+    DbUser Get(string email);
 }

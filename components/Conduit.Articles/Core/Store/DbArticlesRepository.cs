@@ -1,4 +1,5 @@
 using Conduit.Articles.Interface;
+using Conduit.Common;
 
 namespace Conduit.Articles.Core.Store;
 
@@ -17,8 +18,10 @@ public class DbArticlesRepository : IArticlesRepository
         _context.SaveChanges();
     }
 
-    public Article? Get(string slug)
+    public Article Get(string slug)
     {
-        return _context.Articles.FirstOrDefault(article => article.Slug == slug);
+        var article = _context.Articles.FirstOrDefault(article => article.Slug == slug);
+        if (article is null) throw new NotFoundException(nameof(Article));
+        return article;
     }
 }

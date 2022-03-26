@@ -5,7 +5,6 @@ using Conduit.RestApi;
 using Conduit.Users.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.AspNetCore.Http.Results;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +18,8 @@ app.UsePathBase("/api");
 app.UseExceptionMappings(new Dictionary<Type, HttpStatusCode>
 {
     { typeof(NotImplementedException), HttpStatusCode.NotImplemented },
-    { typeof(WrongPasswordException), HttpStatusCode.Unauthorized }
+    { typeof(WrongPasswordException), HttpStatusCode.Unauthorized },
+    { typeof(NotFoundException), HttpStatusCode.NotFound }
 });
 app.UseRouting();
 
@@ -38,12 +38,8 @@ app.MapGet("/articles/feed", NotImplemented);
 app.MapGet("/articles", NotImplemented);
 app.MapPost("/articles", ([FromBody] CreateArticleRequest request, IArticlesComponent articles)
     => new ArticleResponse(articles.Create(request.Article)));
-app.MapGet("/articles/{slug}", (string slug, IArticlesComponent articles) =>
-{
-    var article = articles.Get(slug);
-    if (article is null) return NotFound();
-    return Ok(new ArticleResponse(article));
-});
+app.MapGet("/articles/{slug}", (string slug, IArticlesComponent articles)
+    => new ArticleResponse(articles.Get(slug)));
 app.MapPut("/articles/{slug}", NotImplemented);
 app.MapDelete("/articles/{slug}", NotImplemented);
 

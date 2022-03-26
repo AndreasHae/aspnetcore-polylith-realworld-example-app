@@ -6,5 +6,5 @@ public interface IArticlesRepository
 {
     void Save(Article article);
 
-    Article? Get(string slug);
+    Article Get(string slug);
 }

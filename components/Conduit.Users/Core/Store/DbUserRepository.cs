@@ -1,4 +1,4 @@
-using Conduit.Users.Interface;
+using Conduit.Common;
 
 namespace Conduit.Users.Core.Store;
 
@@ -17,8 +17,10 @@ public class DbUserRepository : IUserRepository
         _context.SaveChanges();
     }
 
-    public DbUser? Get(string email)
+    public DbUser Get(string email)
     {
-        return _context.Users.FirstOrDefault(user => user.Email == email);
+        var user = _context.Users.FirstOrDefault(user => user.Email == email);
+        if (user is null) throw new NotFoundException(nameof(DbUser));
+        return user;
     }
 }

@@ -4,5 +4,5 @@ public interface IArticlesComponent
 {
     Article Create(CreateArticleCommand command);
 
-    Article? Get(string slug);
+    Article Get(string slug);
 }

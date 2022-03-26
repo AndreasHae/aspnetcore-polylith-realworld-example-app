@@ -3,7 +3,7 @@
 public interface IUsersComponent
 {
     User Register(RegisterUserCommand command);
-    User? Login(LoginUserCommand command);
+    User Login(LoginUserCommand command);
 }
 
 public record RegisterUserCommand(

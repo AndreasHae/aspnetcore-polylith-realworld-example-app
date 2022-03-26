@@ -28,7 +28,7 @@ public class ArticlesComponent : IArticlesComponent
         return article;
     }
 
-    public Article? Get(string slug)
+    public Article Get(string slug)
     {
         return _articlesRepository.Get(slug);
     }
